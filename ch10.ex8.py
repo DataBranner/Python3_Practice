@@ -10,28 +10,53 @@ samples of 23 birthdays and checking for matches. Hint: you can generate random
 birthdays with the randint function in the random module."""
 
 
+import random
+
+def birthday_paradox_1(trials=1000):
+    """"""
+    totals = list()
+    for trial in range(trials):
+        total = 0
+        bDayList = sorted([random.randint(0, 365) for _ in range(23)])
+        for bday1, bday2 in zip(bDayList, bDayList[1:]):
+            if bday1 == bday2:
+                total += 1
+        totals.append(total)
+    avg = sum(totals) / len(totals)
+    print('\nThe probability is {} percent ({}).'.format(avg * 100, 'fn 1'))
+
+def birthday_paradox_2(trials=1000):
+    """"""
+    totals = list()
+    for trial in range(trials):
+        bDayList = [random.randint(0, 365) for _ in range(23)]
+        totals.append(len(bDayList)-len(set(bDayList)))
+    avg = sum(totals) / len(totals)
+    print('\nThe probability is {} percent ({}).'.format(avg * 100, 'fn 2'))
+
+def birthday_paradox_3(trials=1000):
+    """Combine both methods and ensure the results are the same."""
+    totals1 = list()
+    totals2 = list()
+    for trial in range(trials):
+        total = 0
+        bDayList = sorted([random.randint(0, 365) for _ in range(23)])
+        for bday1, bday2 in zip(bDayList, bDayList[1:]):
+            if bday1 == bday2:
+                total += 1
+        totals1.append(total)
+        totals2.append(len(bDayList)-len(set(bDayList)))
+    avg1 = sum(totals1) / len(totals1)
+    avg2 = sum(totals2) / len(totals2)
+    print('\nProbability: {}% ({}).'.format(avg1 * 100, 'count dups w/counter'))
+    print('Probability: {}% ({}).'.format(avg2 * 100, 'count dups w/set'))
+    if avg1 != avg2:
+        same = ' not '
+    else:
+        same = ' '
+    print('The results are{}the same when using counter and dups.'.format(same))
 
 
-def birthday_paradox(trial=1000):
-    import random
-    total = 0
-    for trialNum in range(trial):
-        bDayList = []
-        for i in range(23):
-            bDay = random.randint(0, 365)
-            bDayList.append(bDay)
-        bDayList.sort()
-        sameDay = False
-        for i in range(len(bDayList) - 1):
-            if bDayList[i] == bDayList[i + 1]:
-                sameDay = True
-        if sameDay:
-            total += 1
-    prop = (total / trial) * 100
-    print("The propability is ", prop, "percent" )
-
-
-# birthday_paradox(50)
-
-# I know I can seperate this into different functions to avoid bugs. The book has a different answer:
-#http://greenteapress.com/thinkpython2/code/birthday.py
+birthday_paradox_1()
+birthday_paradox_2()
+birthday_paradox_3()
