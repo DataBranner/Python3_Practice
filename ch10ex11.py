@@ -6,34 +6,24 @@ Write a program that finds all the reverse pairs in the word list.
 import bisect
 from ch10ex10 import listWords2
 
-if __name__ == '__main__':
-    word_list = listWords2()
-    print(word_list)
-
-"""def listWords2():
-    fin = open("words.txt")
-    t = []
-    for line in fin:
-        words = line.strip()
-        t += [words]
-    return t
-
-
-def in_bisect(word_list, word):
-    y = bisect.bisect_left(word_list, word)
-     if y == len(word_list):
-        return False
-
-    if word_list[y] == word:
-        print(word)
-
-
-
-
 def reverse_pair():
-    list1 = listWords2()
-    for firstword in list1:
-        firstword = firstword[::-1]
-        in_bisect(list1, firstword)
+    word_list = listWords2()
+    word_set = set(word_list)
+    pairs = list()
+    for word in word_list:
+        # Let's not distinguish differently capitalized forms.
+        word = word.lower()
 
-reverse_pair() """
+        # We don't want to add the same pair twice, in reverse order.
+        # And palindromes don't count, so do this step before anything else.
+        word_set.remove(word)
+        
+        # Reverse word and check for its presence in word_set.
+        reversed_word = word[::-1]
+        if reversed_word in word_set:
+            pairs.append((word, reversed_word))
+    
+    for pair in pairs:
+        print(pair)
+
+reverse_pair()
