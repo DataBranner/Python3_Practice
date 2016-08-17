@@ -7,43 +7,30 @@ Credit: This exercise is inspired by an example at http://puzzlers.org.
 
 Write a program that finds all pairs of words that interlock.
 Hint: don’t enumerate all pairs!
- """
+"""
 
-import bisect
+"""For each word in the word list, determine its two "interlocking" words and
+if both of those are in the word list, add to a collection to be returned.."""
+
 from ch10ex10 import listWords2
 import pprint
 
-# From ch10Ex10
-""" def listWords2():
-    fin = open("words.txt")
-    t = []
-    for line in fin:
-        words = line.strip()
-        t += [words]
-    return t """
-
-def in_bisect(word_list, word):
-    y = bisect.bisect_left(word_list, word)
-    if y == len(word_list):
-        return False
-
-    return word_list[y] == word
-
-
 def interlock(word_list, word):
-
-    first = word[::2]
-    second = word[1::2]
-    return in_bisect(word_list, first) and in_bisect(word_list, second)
-
+    """Return tuple of the two "interlocking" words found in "word"."""
+    return (word[::2], word[1::2])
 
 def interlock_search():
-    if __name__ == '__main__':
-        list1 = listWords2()
+    """If both words are in the word list, add to interlocked_words; return."""
     interlocked_words = []
-    for word in list1:
-        if interlock(list1, word):
-            interlocked_words += [word + ": " + word[::2] + " and " + word[1::2]]
-    pprint.pprint(interlocked_words)
+    words = listWords2()
+    for i, word in enumerate(words):
+        found_pair = interlock(words, word)
+        # Print status every 100 items of original list, to prevent napping.
+        if not i % 100:
+            print('#{}: {} = {} + {}'.format(i, word, found_pair[0],
+                found_pair[1]))
+        if found_pair[0] in words and found_pair[1] in words:
+            interlocked_words.append(found_pair)
+    return interlocked_words
 
-interlock_search()
+pprint.pprint(interlock_search())
